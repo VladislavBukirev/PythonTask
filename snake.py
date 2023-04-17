@@ -20,11 +20,8 @@ class SnakeBlock:
 class Snake:
     def __init__(self):
         self.blocks = [SnakeBlock(9, 9)]
-        self.direction = Direction.RIGHT
         self.score = 0
 
     def add_score(self):
         self.score += 1
 
-
-snake = Snake()
