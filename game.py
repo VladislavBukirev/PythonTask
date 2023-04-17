@@ -22,6 +22,7 @@ class Game:
         self.timer = pygame.time.Clock()
         self.snake = Snake()
         self.food = Food()
+        self.snake_speed = 5
 
     def run(self):
         d_row = 0
@@ -31,7 +32,6 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP and self.snake.direction != Direction.DOWN:
                         d_row = -1
@@ -71,11 +71,12 @@ class Game:
             for block in self.snake.blocks:
                 draw_block(SNAKE_COLOR, block.x, block.y)
 
-            self.food.draw_food()
+            self.food.draw_golden_food()
             if self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y):
                 self.food = Food()
                 self.snake.blocks.append(SnakeBlock(self.snake.blocks[-1].x, self.snake.blocks[-1].y))
                 self.snake.add_score()
+                self.snake.set_speed(2)
 
             new_head = SnakeBlock(head.x + d_row, head.y + d_column)
             if not new_head.is_inside() or any(
@@ -92,4 +93,4 @@ class Game:
             screen.blit(text_score, score_rect.topleft)
 
             pygame.display.flip()
-            self.timer.tick(5)
+            self.timer.tick(self.snake.speed)
