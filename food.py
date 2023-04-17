@@ -11,22 +11,17 @@ class Food:
         self.apple = pygame.transform.scale(self.apple, (SIZE_BLOCK, SIZE_BLOCK))
         self.golden_apple = pygame.image.load("goldenApple.png").convert_alpha()
         self.golden_apple = pygame.transform.scale(self.golden_apple, (SIZE_BLOCK, SIZE_BLOCK))
-        apple = self.apple
+        self.item = random.choice([self.apple, self.golden_apple])
 
     def draw_food(self):
-        screen.blit(self.apple,
-                    (SIZE_BLOCK + self.y * SIZE_BLOCK + MARGIN * (self.y + 1),
-                     HEADER_MARGIN + SIZE_BLOCK + self.x * SIZE_BLOCK + MARGIN * (self.x + 1)))
-
-    def draw_golden_food(self):
-        screen.blit(self.golden_apple,
+        screen.blit(self.item,
                     (SIZE_BLOCK + self.y * SIZE_BLOCK + MARGIN * (self.y + 1),
                      HEADER_MARGIN + SIZE_BLOCK + self.x * SIZE_BLOCK + MARGIN * (self.x + 1)))
 
     def check_collision(self, x, y):
         if self.x == x and self.y == y:
-            if self.apple:
-                return 1
-            elif self.golden_apple:
+            if self.item == self.golden_apple:
                 return 2
+            else:
+                return 1
         return 0

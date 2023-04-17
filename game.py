@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BLACK, PURPLE, screen, size
+from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BACKGROUND_COLOR, BLACK, screen, size
 from snake import Snake
 from food import Food
 from snake import Direction
@@ -60,18 +60,14 @@ class Game:
 
             for row in range(COUNT_BLOCKS):
                 for column in range(COUNT_BLOCKS):
-                    if (row + column) % 2 == 0:
-                        color = BLACK
-                    else:
-                        color = PURPLE
-                    draw_block(color, row, column)
+                    draw_block(BACKGROUND_COLOR, row, column)
 
             head = self.snake.blocks[-1]
 
             for block in self.snake.blocks:
                 draw_block(SNAKE_COLOR, block.x, block.y)
 
-            self.food.draw_golden_food()
+            self.food.draw_food()
             if self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y):
                 self.food = Food()
                 self.snake.blocks.append(SnakeBlock(self.snake.blocks[-1].x, self.snake.blocks[-1].y))
