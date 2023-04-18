@@ -22,6 +22,12 @@ class Game:
         self.timer = pygame.time.Clock()
         self.snake = Snake()
         self.food = Food(self.snake)
+        self.heart_image = pygame.image.load('heart.png').convert_alpha()
+        self.heart_image = pygame.transform.scale(self.heart_image,
+                                                  (20, 20))
+        self.heart_rect = self.heart_image.get_rect()
+        self.heart_rect.topright = (size[0] - 10, 10)
+
 
     def process_movement_key(self, event):
         if event.key == pygame.K_UP:
@@ -39,6 +45,10 @@ class Game:
         score_rect = text_score.get_rect()
         score_rect.center = (size[0] // 2, 30)
         screen.blit(text_score, score_rect.topleft)
+
+        for i in range(self.snake.lives):
+            screen.blit(self.heart_image,
+                        (self.heart_rect.right - (i + 1) * self.heart_rect.width, self.heart_rect.top))
 
     def draw_map(self):
         screen.fill(FRAME_COLOR)
@@ -71,8 +81,10 @@ class Game:
             new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
             if not new_head.is_inside() or any(
                     block != head and block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
-                pygame.quit()
-                sys.exit()
+                self.snake.lives -= 1
+                if self.snake.lives == 0:
+                    pygame.quit()
+                    sys.exit()
             self.snake.blocks.append(new_head)
             self.snake.blocks.pop(0)
 

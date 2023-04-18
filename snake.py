@@ -23,6 +23,7 @@ class Snake:
         self.score = 0
         self.speed = 5
         self.direction = [0, 0]
+        self.lives = 3
 
     def add_score(self, score_value):
         self.score += score_value
