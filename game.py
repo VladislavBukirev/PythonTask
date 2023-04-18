@@ -22,7 +22,6 @@ class Game:
         self.timer = pygame.time.Clock()
         self.snake = Snake()
         self.food = Food(self.snake)
-        self.snake_speed = 5
 
     def run(self):
         d_row = 0
@@ -70,7 +69,6 @@ class Game:
             self.food.draw_food()
             if self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y):
                 self.snake.blocks.append(SnakeBlock(self.snake.blocks[-1].x, self.snake.blocks[-1].y))
-                self.snake.set_speed(2)
 
             new_head = SnakeBlock(head.x + d_row, head.y + d_column)
             if not new_head.is_inside() or any(
