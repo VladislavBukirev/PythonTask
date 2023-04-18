@@ -2,10 +2,10 @@ from constants import COUNT_BLOCKS
 
 
 class Direction:
-    UP = 0
-    DOWN = 1
-    LEFT = 2
-    RIGHT = 3
+    UP = [-1, 0]
+    DOWN = [1, 0]
+    LEFT = [0, -1]
+    RIGHT = [0, 1]
 
 
 class SnakeBlock:
@@ -22,6 +22,7 @@ class Snake:
         self.blocks = [SnakeBlock(9, 9)]
         self.score = 0
         self.speed = 5
+        self.direction = [0, 0]
 
     def add_score(self, score_value):
         self.score += score_value

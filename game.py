@@ -23,36 +23,31 @@ class Game:
         self.snake = Snake()
         self.food = Food(self.snake)
 
+    def process_movement_key(self, event):
+        if event.key == pygame.K_UP:
+            self.snake.direction = Direction.UP
+        elif event.key == pygame.K_DOWN:
+            self.snake.direction = Direction.DOWN
+        elif event.key == pygame.K_RIGHT:
+            self.snake.direction = Direction.RIGHT
+        elif event.key == pygame.K_LEFT:
+            self.snake.direction = Direction.LEFT
+
+    def draw_scores_table(self):
+        font_score = pygame.font.SysFont('Times New Roman', 32)
+        text_score = font_score.render(f'Score: {self.snake.score}', True, BLACK)
+        score_rect = text_score.get_rect()
+        score_rect.center = (size[0] // 2, 30)
+        screen.blit(text_score, score_rect.topleft)
+
     def run(self):
-        d_row = 0
-        d_column = 1
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP and self.snake.direction != Direction.DOWN:
-                        d_row = -1
-                        d_column = 0
-                    elif event.key == pygame.K_DOWN and self.snake.direction != Direction.UP:
-                        d_row = 1
-                        d_column = 0
-                    elif event.key == pygame.K_LEFT and self.snake.direction != Direction.RIGHT:
-                        d_row = 0
-                        d_column = -1
-                    elif event.key == pygame.K_RIGHT and self.snake.direction != Direction.LEFT:
-                        d_row = 0
-                        d_column = 1
-
-                if d_row == -1:
-                    self.snake.direction = Direction.UP
-                elif d_row == 1:
-                    self.snake.direction = Direction.DOWN
-                elif d_column == -1:
-                    self.snake.direction = Direction.LEFT
-                elif d_column == 1:
-                    self.snake.direction = Direction.RIGHT
+                    self.process_movement_key(event)
 
             screen.fill(FRAME_COLOR)
             pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
@@ -70,7 +65,7 @@ class Game:
             if self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y):
                 self.snake.blocks.append(SnakeBlock(self.snake.blocks[-1].x, self.snake.blocks[-1].y))
 
-            new_head = SnakeBlock(head.x + d_row, head.y + d_column)
+            new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
             if not new_head.is_inside() or any(
                     block != head and block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
                 pygame.quit()
@@ -78,11 +73,8 @@ class Game:
             self.snake.blocks.append(new_head)
             self.snake.blocks.pop(0)
 
-            font_score = pygame.font.SysFont('Times New Roman', 32)
-            text_score = font_score.render(f'Score: {self.snake.score}', True, BLACK)
-            score_rect = text_score.get_rect()
-            score_rect.center = (size[0] // 2, 30)
-            screen.blit(text_score, score_rect.topleft)
+            self.draw_scores_table()
 
             pygame.display.flip()
             self.timer.tick(self.snake.speed)
+
