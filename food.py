@@ -1,10 +1,13 @@
 from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, screen
+from snake import Snake
 import random
 import pygame
 
 
 class Food:
-    def __init__(self):
+    foods = []
+
+    def __init__(self, snake):
         self.x = random.randint(1, COUNT_BLOCKS - 1)
         self.y = random.randint(1, COUNT_BLOCKS - 1)
         self.apple = pygame.image.load("apple.png").convert_alpha()
@@ -12,16 +15,29 @@ class Food:
         self.golden_apple = pygame.image.load("goldenApple.png").convert_alpha()
         self.golden_apple = pygame.transform.scale(self.golden_apple, (SIZE_BLOCK, SIZE_BLOCK))
         self.item = random.choice([self.apple, self.golden_apple])
+        self.snake = snake
+        self.foods.append(self)
 
     def draw_food(self):
-        screen.blit(self.item,
-                    (SIZE_BLOCK + self.y * SIZE_BLOCK + MARGIN * (self.y + 1),
-                     HEADER_MARGIN + SIZE_BLOCK + self.x * SIZE_BLOCK + MARGIN * (self.x + 1)))
+        for food in self.foods:
+            screen.blit(food.item,
+                        (SIZE_BLOCK + food.y * SIZE_BLOCK + MARGIN * (food.y + 1),
+                         HEADER_MARGIN + SIZE_BLOCK + food.x * SIZE_BLOCK + MARGIN * (food.x + 1)))
 
     def check_collision(self, x, y):
-        if self.x == x and self.y == y:
-            if self.item == self.golden_apple:
-                return 2
-            else:
+        for food in self.foods:
+            if food.x == x and food.y == y:
+                if food.item == self.golden_apple:
+                    self.snake.add_score(3)
+                else:
+                    self.snake.add_score(1)
+                self.foods.remove(food)
+                self.create_new_food()
                 return 1
         return 0
+
+    def create_new_food(self):
+        self.x = random.randint(1, COUNT_BLOCKS - 1)
+        self.y = random.randint(1, COUNT_BLOCKS - 1)
+        self.item = random.choice([self.apple, self.golden_apple])
+        self.foods.append(self)

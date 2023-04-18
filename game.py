@@ -21,7 +21,7 @@ class Game:
         pygame.display.set_caption("Snake")
         self.timer = pygame.time.Clock()
         self.snake = Snake()
-        self.food = Food()
+        self.food = Food(self.snake)
         self.snake_speed = 5
 
     def run(self):
@@ -69,9 +69,7 @@ class Game:
 
             self.food.draw_food()
             if self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y):
-                self.food = Food()
                 self.snake.blocks.append(SnakeBlock(self.snake.blocks[-1].x, self.snake.blocks[-1].y))
-                self.snake.add_score()
                 self.snake.set_speed(2)
 
             new_head = SnakeBlock(head.x + d_row, head.y + d_column)

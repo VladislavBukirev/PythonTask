@@ -23,8 +23,8 @@ class Snake:
         self.score = 0
         self.speed = 5
 
-    def add_score(self):
-        self.score += 1
+    def add_score(self, score_value):
+        self.score += score_value
 
     def set_speed(self, speed):
         self.speed += 2
