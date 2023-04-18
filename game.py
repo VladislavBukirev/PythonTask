@@ -40,6 +40,14 @@ class Game:
         score_rect.center = (size[0] // 2, 30)
         screen.blit(text_score, score_rect.topleft)
 
+    def draw_map(self):
+        screen.fill(FRAME_COLOR)
+        pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
+
+        for row in range(COUNT_BLOCKS):
+            for column in range(COUNT_BLOCKS):
+                draw_block(BACKGROUND_COLOR, row, column)
+
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -49,12 +57,7 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     self.process_movement_key(event)
 
-            screen.fill(FRAME_COLOR)
-            pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
-
-            for row in range(COUNT_BLOCKS):
-                for column in range(COUNT_BLOCKS):
-                    draw_block(BACKGROUND_COLOR, row, column)
+            self.draw_map()
 
             head = self.snake.blocks[-1]
 
@@ -74,7 +77,6 @@ class Game:
             self.snake.blocks.pop(0)
 
             self.draw_scores_table()
-
             pygame.display.flip()
             self.timer.tick(self.snake.speed)
 
