@@ -21,15 +21,15 @@ class Food:
         self.foods_list.append(self)
 
     def draw_food(self):
-        for food in self.foods:
-            screen.blit(self.foods[self.item],
-                        (SIZE_BLOCK + self.y * SIZE_BLOCK + MARGIN * (self.y + 1),
-                         HEADER_MARGIN + SIZE_BLOCK + self.x * SIZE_BLOCK + MARGIN * (self.x + 1)))
+        screen.blit(self.foods[self.item],
+                    (SIZE_BLOCK + self.y * SIZE_BLOCK + MARGIN * (self.y + 1),
+                     HEADER_MARGIN + SIZE_BLOCK + self.x * SIZE_BLOCK + MARGIN * (self.x + 1)))
 
     def check_collision(self, x, y):
         if self.x == x and self.y == y:
             if self.item == 'bad_apple':
-                self.snake.score -= 1
+                self.snake.reduce_length()
+                self.snake.reduce_length()
             elif self.item == 'golden_apple':
                 self.snake.score += 1
             elif self.item == 'storm':
@@ -39,8 +39,8 @@ class Food:
             elif self.item == 'chest':
                 self.snake.score += 5
             self.create_new_food()
-            return 1
-        return 0
+            return True
+        return False
 
     def create_new_food(self):
         self.x = random.randint(1, COUNT_BLOCKS - 1)

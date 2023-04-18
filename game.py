@@ -15,6 +15,15 @@ def draw_block(color, row, column):
                       SIZE_BLOCK, SIZE_BLOCK])
 
 
+def draw_map():
+    screen.fill(FRAME_COLOR)
+    pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
+
+    for row in range(COUNT_BLOCKS):
+        for column in range(COUNT_BLOCKS):
+            draw_block(BACKGROUND_COLOR, row, column)
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -26,8 +35,7 @@ class Game:
         self.heart_image = pygame.transform.scale(self.heart_image,
                                                   (20, 20))
         self.heart_rect = self.heart_image.get_rect()
-        self.heart_rect.topright = (size[0] - 10, 10)
-
+        self.heart_rect.topleft = (50, 10)
 
     def process_movement_key(self, event):
         if event.key == pygame.K_UP:
@@ -50,14 +58,6 @@ class Game:
             screen.blit(self.heart_image,
                         (self.heart_rect.right - (i + 1) * self.heart_rect.width, self.heart_rect.top))
 
-    def draw_map(self):
-        screen.fill(FRAME_COLOR)
-        pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
-
-        for row in range(COUNT_BLOCKS):
-            for column in range(COUNT_BLOCKS):
-                draw_block(BACKGROUND_COLOR, row, column)
-
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -67,16 +67,12 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     self.process_movement_key(event)
 
-            self.draw_map()
+            draw_map()
 
             head = self.snake.blocks[-1]
 
             for block in self.snake.blocks:
                 draw_block(SNAKE_COLOR, block.x, block.y)
-
-            self.food.draw_food()
-            if self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y):
-                self.snake.blocks.append(SnakeBlock(self.snake.blocks[-1].x, self.snake.blocks[-1].y))
 
             new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
             if not new_head.is_inside() or any(
@@ -85,10 +81,15 @@ class Game:
                 if self.snake.lives == 0:
                     pygame.quit()
                     sys.exit()
+
+            self.food.draw_food()
+
+            if self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y):
+                self.snake.increase_length()
+
             self.snake.blocks.append(new_head)
-            self.snake.blocks.pop(0)
+            self.snake.reduce_length()
 
             self.draw_scores_table()
             pygame.display.flip()
             self.timer.tick(self.snake.speed)
-

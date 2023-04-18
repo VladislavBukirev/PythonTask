@@ -24,9 +24,17 @@ class Snake:
         self.speed = 5
         self.direction = [0, 0]
         self.lives = 3
+        self.should_reduce_len = False
 
     def add_score(self, score_value):
         self.score += score_value
 
     def set_speed(self, added_speed):
         self.speed += added_speed
+
+    def increase_length(self):
+        self.blocks.append(SnakeBlock(self.blocks[-1].x, self.blocks[-1].y))
+
+    def reduce_length(self):
+        self.blocks.pop(0)
+
