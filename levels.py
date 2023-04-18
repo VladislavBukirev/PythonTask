@@ -20,6 +20,7 @@ def draw_map():
 
 
 class Levels:
-    def __init__(self, length):
+    def __init__(self, number, length):
+        self.number = number
         self.length = length
 

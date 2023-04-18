@@ -25,9 +25,9 @@ def draw_map():
             draw_block(BACKGROUND_COLOR, row, column)
 
 
-level1 = Levels(3)
-level2 = Levels(15)
-level3 = Levels(100)
+level1 = Levels(1, 3)
+level2 = Levels(2, 15)
+level3 = Levels(3, 100)
 
 
 class Game:
@@ -84,10 +84,15 @@ class Game:
 
     def draw_level(self):
         font_level = pygame.font.SysFont('Times New Roman', 16)
-        text_level = font_level.render(f'Level: {self.level.length}', True, BLACK)
-        score_level = text_level.get_rect()
-        score_level.center = (40, 40)
-        screen.blit(text_level, score_level.bottomleft)
+        font_condition = pygame.font.SysFont('Times New Roman', 16)
+        text_level = font_level.render(f'Level: {self.level.number}', True, BLACK)
+        text_condition = font_condition.render(f'Condition for next level: {self.level.length}', True, BLACK)
+        level_rect = text_level.get_rect()
+        condition_rect = text_condition.get_rect()
+        level_rect.center = (40, 20)
+        condition_rect.center = (95, 40)
+        screen.blit(text_level, level_rect.bottomleft)
+        screen.blit(text_condition, condition_rect.bottomleft)
 
     def switch_level(self, level):
         self.level = level
@@ -119,8 +124,7 @@ class Game:
             self.snake.reduce_length()
 
             if len(self.snake.blocks) == self.level.length:
-                self.switch_level(2)
-                print("aaaaafafsaf")
+                self.switch_level(level2)
 
             self.draw_level()
             self.draw_lives()
