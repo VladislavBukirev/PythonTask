@@ -20,7 +20,8 @@ def draw_map():
 
 
 class Levels:
-    def __init__(self, number, length):
+    def __init__(self, number, length, obstacles=None):
         self.number = number
         self.length = length
+        self.obstacles = obstacles or []
 

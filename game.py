@@ -16,18 +16,11 @@ def draw_block(color, row, column):
                       SIZE_BLOCK, SIZE_BLOCK])
 
 
-def draw_map():
-    screen.fill(FRAME_COLOR)
-    pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
-
-    for row in range(COUNT_BLOCKS):
-        for column in range(COUNT_BLOCKS):
-            draw_block(BACKGROUND_COLOR, row, column)
-
 
 level1 = Levels(1, 3)
-level2 = Levels(2, 15)
+level2 = Levels(2, 15, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5)])
 level3 = Levels(3, 100)
+Levels_list = [level1, level2, level3]
 
 
 class Game:
@@ -38,6 +31,17 @@ class Game:
         self.snake = Snake()
         self.food = Food(self.snake)
         self.level = level1
+
+    def draw_map(self):
+        screen.fill(FRAME_COLOR)
+        pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
+
+        for row in range(COUNT_BLOCKS):
+            for column in range(COUNT_BLOCKS):
+                if (row, column) in self.level.obstacles:
+                    draw_block(BLACK, row, column)
+                else:
+                    draw_block(BACKGROUND_COLOR, row, column)
 
     def draw_lives(self):
         heart_image = pygame.image.load("heart.png").convert_alpha()
@@ -94,8 +98,13 @@ class Game:
         screen.blit(text_level, level_rect.bottomleft)
         screen.blit(text_condition, condition_rect.bottomleft)
 
-    def switch_level(self, level):
-        self.level = level
+    def switch_level(self):
+        index = Levels_list.index(self.level)
+        if index < len(Levels_list):
+            self.level = Levels_list[index + 1]
+        else:
+            pygame.quit()
+            sys.exit()
 
     def run(self):
         while True:
@@ -106,7 +115,7 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     self.process_movement_key(event)
 
-            draw_map()
+            self.draw_map()
 
             head = self.snake.blocks[-1]
             new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
@@ -124,7 +133,7 @@ class Game:
             self.snake.reduce_length()
 
             if len(self.snake.blocks) == self.level.length:
-                self.switch_level(level2)
+                self.switch_level()
 
             self.draw_level()
             self.draw_lives()
