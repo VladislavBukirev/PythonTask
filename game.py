@@ -58,6 +58,13 @@ class Game:
             screen.blit(self.heart_image,
                         (self.heart_rect.right - (i + 1) * self.heart_rect.width, self.heart_rect.top))
 
+    def draw_snake_length(self):
+        printed_length = pygame.font.SysFont("Times New Roman", 16)
+        text_length = printed_length.render(f'Length: {len(self.snake.blocks)}', True, BLACK)
+        len_rect = text_length.get_rect()
+        len_rect.bottomright = (size[0] - 10, HEADER_MARGIN - 5)
+        screen.blit(text_length, len_rect)
+
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -91,5 +98,6 @@ class Game:
             self.snake.reduce_length()
 
             self.draw_scores_table()
+            self.draw_snake_length()
             pygame.display.flip()
             self.timer.tick(self.snake.speed)
