@@ -6,6 +6,7 @@ from snake import Snake
 from food import Food
 from snake import Direction
 from snake import SnakeBlock
+from levels import Levels
 
 
 def draw_block(color, row, column):
@@ -24,6 +25,11 @@ def draw_map():
             draw_block(BACKGROUND_COLOR, row, column)
 
 
+level1 = Levels(3)
+level2 = Levels(15)
+level3 = Levels(100)
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -31,6 +37,7 @@ class Game:
         self.timer = pygame.time.Clock()
         self.snake = Snake()
         self.food = Food(self.snake)
+        self.level = level1
 
     def draw_lives(self):
         heart_image = pygame.image.load("heart.png").convert_alpha()
@@ -75,6 +82,16 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
+    def draw_level(self):
+        font_level = pygame.font.SysFont('Times New Roman', 16)
+        text_level = font_level.render(f'Level: {self.level.length}', True, BLACK)
+        score_level = text_level.get_rect()
+        score_level.center = (40, 40)
+        screen.blit(text_level, score_level.bottomleft)
+
+    def switch_level(self, level):
+        self.level = level
+
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -101,6 +118,11 @@ class Game:
             self.snake.blocks.append(new_head)
             self.snake.reduce_length()
 
+            if len(self.snake.blocks) == self.level.length:
+                self.switch_level(2)
+                print("aaaaafafsaf")
+
+            self.draw_level()
             self.draw_lives()
             self.draw_scores_table()
             self.draw_snake_length()
