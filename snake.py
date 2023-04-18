@@ -21,10 +21,10 @@ class Snake:
     def __init__(self):
         self.blocks = [SnakeBlock(9, 9)]
         self.score = 0
-        self.speed = 10
+        self.speed = 5
 
     def add_score(self, score_value):
         self.score += score_value
 
-    def set_speed(self, added_value):
-        self.speed += added_value
+    def set_speed(self, added_speed):
+        self.speed += added_speed

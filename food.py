@@ -1,5 +1,4 @@
 from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, screen
-from snake import Snake
 import random
 import pygame
 
@@ -9,17 +8,17 @@ class Food:
 
     def __init__(self, snake):
         self.snake = snake
+        self.bad_apple = pygame.image.load("badApple.png").convert_alpha()
+        self.golden_apple = pygame.image.load("goldenApple.png").convert_alpha()
+        self.storm = pygame.image.load("storm.png").convert_alpha()
+        self.chest = pygame.image.load("chest.png").convert_alpha()
+        self.bad_storm = pygame.image.load("badStorm.png").convert_alpha()
         self.x = random.randint(1, COUNT_BLOCKS - 1)
         self.y = random.randint(1, COUNT_BLOCKS - 1)
-        self.bad_apple = pygame.image.load("badApple.png").convert_alpha()
         self.bad_apple = pygame.transform.scale(self.bad_apple, (SIZE_BLOCK, SIZE_BLOCK))
-        self.golden_apple = pygame.image.load("goldenApple.png").convert_alpha()
         self.golden_apple = pygame.transform.scale(self.golden_apple, (SIZE_BLOCK, SIZE_BLOCK))
-        self.storm = pygame.image.load("storm.png").convert_alpha()
         self.storm = pygame.transform.scale(self.storm, (SIZE_BLOCK, SIZE_BLOCK))
-        self.chest = pygame.image.load("chest.png").convert_alpha()
         self.chest = pygame.transform.scale(self.chest, (SIZE_BLOCK, SIZE_BLOCK))
-        self.bad_storm = pygame.image.load("badStorm.png").convert_alpha()
         self.bad_storm = pygame.transform.scale(self.bad_storm, (SIZE_BLOCK, SIZE_BLOCK))
         self.item = random.choice([self.bad_apple, self.golden_apple, self.storm, self.chest, self.bad_storm])
         self.foods.append(self)
