@@ -44,13 +44,13 @@ class Game:
                         (heart_rect.right - (i + 1) * heart_rect.width, heart_rect.top))
 
     def process_movement_key(self, event):
-        if event.key == pygame.K_UP:
+        if event.key == pygame.K_UP and self.snake.direction != Direction.DOWN:
             self.snake.direction = Direction.UP
-        elif event.key == pygame.K_DOWN:
+        elif event.key == pygame.K_DOWN and self.snake.direction != Direction.UP:
             self.snake.direction = Direction.DOWN
-        elif event.key == pygame.K_RIGHT:
+        elif event.key == pygame.K_RIGHT and self.snake.direction != Direction.LEFT:
             self.snake.direction = Direction.RIGHT
-        elif event.key == pygame.K_LEFT:
+        elif event.key == pygame.K_LEFT and self.snake.direction != Direction.RIGHT:
             self.snake.direction = Direction.LEFT
 
     def draw_scores_table(self):
