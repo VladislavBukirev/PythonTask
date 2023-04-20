@@ -1,7 +1,6 @@
 import pygame
 import sys
 import os
-import random
 
 from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BACKGROUND_COLOR, BLACK, SCREEN, SIZE
 from snake import Snake
@@ -18,9 +17,9 @@ def draw_block(color, row, column):
                       SIZE_BLOCK, SIZE_BLOCK])
 
 
-level1 = Levels(1, 3)
-level2 = Levels(2, 5, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5)])
-level3 = Levels(3, 7, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5), (15, 12), (15, 13), (15, 14), (15, 15)])
+level1 = Levels(1, 5)
+level2 = Levels(2, 10, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5)])
+level3 = Levels(3, 15, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5), (15, 12), (15, 13), (15, 14), (15, 15)])
 Levels_list = [level1, level2, level3]
 
 
@@ -32,17 +31,6 @@ class Game:
         self.snake = Snake()
         self.food = Food(self.snake)
         self.level = level1
-
-    def draw_map(self):
-        SCREEN.fill(FRAME_COLOR)
-        pygame.draw.rect(SCREEN, HEADER_COLOR, [0, 0, SIZE[0], HEADER_MARGIN])
-
-        for row in range(COUNT_BLOCKS):
-            for column in range(COUNT_BLOCKS):
-                if (row, column) in self.level.obstacles:
-                    draw_block(BLACK, row, column)
-                else:
-                    draw_block(BACKGROUND_COLOR, row, column)
 
     def draw_lives(self):
         path_to_image = os.path.join(r"C:\Users\79521\PycharmProjects\Snake\FoodImages")
@@ -82,8 +70,9 @@ class Game:
     def check_collision(self):
         head = self.snake.blocks[-1]
         new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
-        if not new_head.is_inside() or any(
-                block != head and block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
+        if any(new_head.x == block[0] and new_head.y == block[1] for block in self.level.obstacles) or \
+                not new_head.is_inside() or \
+                any(block != head and block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
             self.snake.lives -= 1
             if self.snake.lives == 0:
                 pygame.quit()
@@ -118,7 +107,7 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     self.process_movement_key(event)
 
-            self.draw_map()
+            self.level.draw_level()
 
             head = self.snake.blocks[-1]
             new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])

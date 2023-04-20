@@ -10,18 +10,19 @@ def draw_block(color, row, column):
                       SIZE_BLOCK, SIZE_BLOCK])
 
 
-def draw_map():
-    SCREEN.fill(FRAME_COLOR)
-    pygame.draw.rect(SCREEN, HEADER_COLOR, [0, 0, SIZE[0], HEADER_MARGIN])
-
-    for row in range(COUNT_BLOCKS):
-        for column in range(COUNT_BLOCKS):
-            draw_block(BACKGROUND_COLOR, row, column)
-
-
 class Levels:
     def __init__(self, number, length, obstacles=None):
         self.number = number
         self.length = length
         self.obstacles = obstacles or []
 
+    def draw_level(self):
+        SCREEN.fill(FRAME_COLOR)
+        pygame.draw.rect(SCREEN, HEADER_COLOR, [0, 0, SIZE[0], HEADER_MARGIN])
+
+        for row in range(COUNT_BLOCKS):
+            for column in range(COUNT_BLOCKS):
+                if (row, column) in self.obstacles:
+                    draw_block(BLACK, row, column)
+                else:
+                    draw_block(BACKGROUND_COLOR, row, column)

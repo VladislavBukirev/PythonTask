@@ -32,7 +32,7 @@ class Food:
         for i in range(3):
             x = random.randint(1, COUNT_BLOCKS - 1)
             y = random.randint(1, COUNT_BLOCKS - 1)
-            if len(self.snake.blocks) == 1:
+            if len(self.snake.blocks) <= 3:
                 item = "bad_apple"
             elif self.snake.speed <= 5:
                 item = "bad_storm"
