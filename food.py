@@ -28,35 +28,55 @@ class Food:
                 pygame.image.load(os.path.join(food_images_path, "badStorm.png")).convert_alpha(),
                 (SIZE_BLOCK, SIZE_BLOCK))
         }
-        self.x = random.randint(1, COUNT_BLOCKS - 1)
-        self.y = random.randint(1, COUNT_BLOCKS - 1)
-        self.item = random.choice(list(self.foods.keys()))
-        self.foods_list.append(self)
+        self.foods_list = []
+        for i in range(3):
+            x = random.randint(1, COUNT_BLOCKS - 1)
+            y = random.randint(1, COUNT_BLOCKS - 1)
+            if len(self.snake.blocks) == 1:
+                item = "bad_apple"
+            elif self.snake.speed <= 5:
+                item = "bad_storm"
+            else:
+                item = None
+            self.foods_list.append((x, y, random.choice([key for key in self.foods.keys() if key != item])))
 
     def draw_food(self):
-        SCREEN.blit(self.foods[self.item],
-                    (SIZE_BLOCK + self.y * SIZE_BLOCK + MARGIN * (self.y + 1),
-                     HEADER_MARGIN + SIZE_BLOCK + self.x * SIZE_BLOCK + MARGIN * (self.x + 1)))
+        for food in self.foods_list:
+            x, y, item = food
+            SCREEN.blit(self.foods[item],
+                        (SIZE_BLOCK + y * SIZE_BLOCK + MARGIN * (y + 1),
+                         HEADER_MARGIN + SIZE_BLOCK + x * SIZE_BLOCK + MARGIN * (x + 1)))
 
     def check_collision(self, x, y):
-        if self.x == x and self.y == y:
-            if self.item == 'bad_apple':
-                self.snake.reduce_length()
-                self.snake.reduce_length()
-            elif self.item == 'golden_apple':
-                self.snake.score += 1
-            elif self.item == 'storm':
-                self.snake.set_speed(2)
-            elif self.item == 'bad_storm':
-                self.snake.set_speed(-2)
-            elif self.item == 'chest':
-                self.snake.score += 5
-            self.create_new_food()
-            return True
+        for food in self.foods_list:
+            fx, fy, item = food
+            if fx == x and fy == y:
+                if item == 'bad_apple':
+                    self.snake.reduce_length()
+                elif item == 'golden_apple':
+                    self.snake.score += 1
+                    self.snake.increase_length()
+                elif item == 'storm':
+                    self.snake.set_speed(2)
+                    self.snake.increase_length()
+                elif item == 'bad_storm':
+                    self.snake.set_speed(-2)
+                elif item == 'chest':
+                    self.snake.score += 5
+                    self.snake.increase_length()
+                self.foods_list.remove(food)
+                self.create_new_food()
+                return True
         return False
 
     def create_new_food(self):
-        self.x = random.randint(1, COUNT_BLOCKS - 1)
-        self.y = random.randint(1, COUNT_BLOCKS - 1)
-        self.item = random.choice(list(self.foods.keys()))
-        self.foods_list.append(self)
+        while len(self.foods_list) < 3:
+            x = random.randint(1, COUNT_BLOCKS - 1)
+            y = random.randint(1, COUNT_BLOCKS - 1)
+            if len(self.snake.blocks) == 1:
+                item = "bad_apple"
+            elif self.snake.speed <= 5:
+                item = "bad_storm"
+            else:
+                item = None
+            self.foods_list.append((x, y, random.choice([key for key in self.foods.keys() if key != item])))

@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import random
 
 from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BACKGROUND_COLOR, BLACK, SCREEN, SIZE
 from snake import Snake
@@ -128,8 +129,7 @@ class Game:
             self.check_collision()
             self.food.draw_food()
 
-            if self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y):
-                self.snake.increase_length()
+            self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y)
 
             self.snake.blocks.append(new_head)
             self.snake.reduce_length()
