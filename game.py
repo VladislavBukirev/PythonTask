@@ -1,7 +1,8 @@
 import pygame
 import sys
+import os
 
-from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BACKGROUND_COLOR, BLACK, screen, size
+from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BACKGROUND_COLOR, BLACK, SCREEN, SIZE
 from snake import Snake
 from food import Food
 from snake import Direction
@@ -10,16 +11,15 @@ from levels import Levels
 
 
 def draw_block(color, row, column):
-    pygame.draw.rect(screen, color,
+    pygame.draw.rect(SCREEN, color,
                      [SIZE_BLOCK + column * SIZE_BLOCK + MARGIN * (column + 1),
                       HEADER_MARGIN + SIZE_BLOCK + row * SIZE_BLOCK + MARGIN * (row + 1),
                       SIZE_BLOCK, SIZE_BLOCK])
 
 
-
 level1 = Levels(1, 3)
-level2 = Levels(2, 15, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5)])
-level3 = Levels(3, 100)
+level2 = Levels(2, 5, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5)])
+level3 = Levels(3, 7, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5), (15, 12), (15, 13), (15, 14), (15, 15)])
 Levels_list = [level1, level2, level3]
 
 
@@ -33,8 +33,8 @@ class Game:
         self.level = level1
 
     def draw_map(self):
-        screen.fill(FRAME_COLOR)
-        pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
+        SCREEN.fill(FRAME_COLOR)
+        pygame.draw.rect(SCREEN, HEADER_COLOR, [0, 0, SIZE[0], HEADER_MARGIN])
 
         for row in range(COUNT_BLOCKS):
             for column in range(COUNT_BLOCKS):
@@ -44,12 +44,14 @@ class Game:
                     draw_block(BACKGROUND_COLOR, row, column)
 
     def draw_lives(self):
-        heart_image = pygame.image.load("heart.png").convert_alpha()
-        heart_image = pygame.transform.scale(heart_image, (20, 20))
+        path_to_image = os.path.join(r"C:\Users\79521\PycharmProjects\Snake\FoodImages")
+        heart_image = pygame.transform.scale(
+                pygame.image.load(os.path.join(path_to_image, "heart.png")).convert_alpha(),
+                (20, 20))
         heart_rect = heart_image.get_rect()
         heart_rect.topleft = (50, 10)
         for i in range(self.snake.lives):
-            screen.blit(heart_image,
+            SCREEN.blit(heart_image,
                         (heart_rect.right - (i + 1) * heart_rect.width, heart_rect.top))
 
     def process_movement_key(self, event):
@@ -66,15 +68,15 @@ class Game:
         font_score = pygame.font.SysFont('Times New Roman', 32)
         text_score = font_score.render(f'Score: {self.snake.score}', True, BLACK)
         score_rect = text_score.get_rect()
-        score_rect.center = (size[0] // 2, 30)
-        screen.blit(text_score, score_rect.topleft)
+        score_rect.center = (SIZE[0] // 2, 30)
+        SCREEN.blit(text_score, score_rect.topleft)
 
     def draw_snake_length(self):
         printed_length = pygame.font.SysFont("Times New Roman", 16)
         text_length = printed_length.render(f'Length: {len(self.snake.blocks)}', True, BLACK)
         len_rect = text_length.get_rect()
-        len_rect.bottomright = (size[0] - 10, HEADER_MARGIN - 5)
-        screen.blit(text_length, len_rect)
+        len_rect.bottomright = (SIZE[0] - 10, HEADER_MARGIN - 5)
+        SCREEN.blit(text_length, len_rect)
 
     def check_collision(self):
         head = self.snake.blocks[-1]
@@ -95,12 +97,12 @@ class Game:
         condition_rect = text_condition.get_rect()
         level_rect.center = (40, 20)
         condition_rect.center = (95, 40)
-        screen.blit(text_level, level_rect.bottomleft)
-        screen.blit(text_condition, condition_rect.bottomleft)
+        SCREEN.blit(text_level, level_rect.bottomleft)
+        SCREEN.blit(text_condition, condition_rect.bottomleft)
 
     def switch_level(self):
         index = Levels_list.index(self.level)
-        if index < len(Levels_list):
+        if index < len(Levels_list) - 1:
             self.level = Levels_list[index + 1]
         else:
             pygame.quit()

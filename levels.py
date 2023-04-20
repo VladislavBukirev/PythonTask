@@ -1,18 +1,18 @@
 
 import pygame
-from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BACKGROUND_COLOR, BLACK, screen, size
+from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BACKGROUND_COLOR, BLACK, SCREEN, SIZE
 
 
 def draw_block(color, row, column):
-    pygame.draw.rect(screen, color,
+    pygame.draw.rect(SCREEN, color,
                      [SIZE_BLOCK + column * SIZE_BLOCK + MARGIN * (column + 1),
                       HEADER_MARGIN + SIZE_BLOCK + row * SIZE_BLOCK + MARGIN * (row + 1),
                       SIZE_BLOCK, SIZE_BLOCK])
 
 
 def draw_map():
-    screen.fill(FRAME_COLOR)
-    pygame.draw.rect(screen, HEADER_COLOR, [0, 0, size[0], HEADER_MARGIN])
+    SCREEN.fill(FRAME_COLOR)
+    pygame.draw.rect(SCREEN, HEADER_COLOR, [0, 0, SIZE[0], HEADER_MARGIN])
 
     for row in range(COUNT_BLOCKS):
         for column in range(COUNT_BLOCKS):
