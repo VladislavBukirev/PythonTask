@@ -2,7 +2,7 @@ import pygame
 import sys
 import os
 
-from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, FRAME_COLOR, HEADER_COLOR, SNAKE_COLOR, BACKGROUND_COLOR, BLACK, SCREEN, SIZE
+from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, SNAKE_COLOR, BLACK, SCREEN, SIZE
 from snake import Snake
 from food import Food
 from snake import Direction
@@ -23,14 +23,26 @@ level3 = Levels(3, 15, obstacles=[(2, 2), (2, 3), (2, 4), (2, 5), (15, 12), (15,
 Levels_list = [level1, level2, level3]
 
 
-class Game:
-    def __init__(self):
-        pygame.init()
-        pygame.display.set_caption("Snake")
-        self.timer = pygame.time.Clock()
-        self.snake = Snake()
-        self.food = Food(self.snake)
-        self.level = level1
+class GameView:
+    def __init__(self, snake, level):
+        self.snake = snake
+        self.level = level
+
+    def draw_snake(self):
+        for block in self.snake.blocks:
+            draw_block(SNAKE_COLOR, block.x, block.y)
+
+    def draw_level(self):
+        font_level = pygame.font.SysFont('Times New Roman', 16)
+        font_condition = pygame.font.SysFont('Times New Roman', 16)
+        text_level = font_level.render(f'Level: {self.level.number}', True, BLACK)
+        text_condition = font_condition.render(f'Condition for next level: {self.level.length}', True, BLACK)
+        level_rect = text_level.get_rect()
+        condition_rect = text_condition.get_rect()
+        level_rect.center = (40, 20)
+        condition_rect.center = (95, 40)
+        SCREEN.blit(text_level, level_rect.bottomleft)
+        SCREEN.blit(text_condition, condition_rect.bottomleft)
 
     def draw_lives(self):
         path_to_image = os.path.join(r"C:\Users\79521\PycharmProjects\Snake\FoodImages")
@@ -42,16 +54,6 @@ class Game:
         for i in range(self.snake.lives):
             SCREEN.blit(heart_image,
                         (heart_rect.right - (i + 1) * heart_rect.width, heart_rect.top))
-
-    def process_movement_key(self, event):
-        if event.key == pygame.K_UP and self.snake.direction != Direction.DOWN:
-            self.snake.direction = Direction.UP
-        elif event.key == pygame.K_DOWN and self.snake.direction != Direction.UP:
-            self.snake.direction = Direction.DOWN
-        elif event.key == pygame.K_RIGHT and self.snake.direction != Direction.LEFT:
-            self.snake.direction = Direction.RIGHT
-        elif event.key == pygame.K_LEFT and self.snake.direction != Direction.RIGHT:
-            self.snake.direction = Direction.LEFT
 
     def draw_scores_table(self):
         font_score = pygame.font.SysFont('Times New Roman', 32)
@@ -67,6 +69,27 @@ class Game:
         len_rect.bottomright = (SIZE[0] - 10, HEADER_MARGIN - 5)
         SCREEN.blit(text_length, len_rect)
 
+
+class Game:
+    def __init__(self):
+        pygame.init()
+        pygame.display.set_caption("Snake")
+        self.timer = pygame.time.Clock()
+        self.snake = Snake()
+        self.food = Food(self.snake)
+        self.level = level1
+        self.view = GameView(self.snake, self.level)
+
+    def process_movement_key(self, event):
+        if event.key == pygame.K_UP and self.snake.direction != Direction.DOWN:
+            self.snake.direction = Direction.UP
+        elif event.key == pygame.K_DOWN and self.snake.direction != Direction.UP:
+            self.snake.direction = Direction.DOWN
+        elif event.key == pygame.K_RIGHT and self.snake.direction != Direction.LEFT:
+            self.snake.direction = Direction.RIGHT
+        elif event.key == pygame.K_LEFT and self.snake.direction != Direction.RIGHT:
+            self.snake.direction = Direction.LEFT
+
     def check_collision(self):
         head = self.snake.blocks[-1]
         new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
@@ -77,18 +100,6 @@ class Game:
             if self.snake.lives == 0:
                 pygame.quit()
                 sys.exit()
-
-    def draw_level(self):
-        font_level = pygame.font.SysFont('Times New Roman', 16)
-        font_condition = pygame.font.SysFont('Times New Roman', 16)
-        text_level = font_level.render(f'Level: {self.level.number}', True, BLACK)
-        text_condition = font_condition.render(f'Condition for next level: {self.level.length}', True, BLACK)
-        level_rect = text_level.get_rect()
-        condition_rect = text_condition.get_rect()
-        level_rect.center = (40, 20)
-        condition_rect.center = (95, 40)
-        SCREEN.blit(text_level, level_rect.bottomleft)
-        SCREEN.blit(text_condition, condition_rect.bottomleft)
 
     def switch_level(self):
         index = Levels_list.index(self.level)
@@ -112,8 +123,7 @@ class Game:
             head = self.snake.blocks[-1]
             new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
 
-            for block in self.snake.blocks:
-                draw_block(SNAKE_COLOR, block.x, block.y)
+            self.view.draw_snake()
 
             self.check_collision()
             self.food.draw_food()
@@ -126,9 +136,9 @@ class Game:
             if len(self.snake.blocks) == self.level.length:
                 self.switch_level()
 
-            self.draw_level()
-            self.draw_lives()
-            self.draw_scores_table()
-            self.draw_snake_length()
+            self.view.draw_level()
+            self.view.draw_lives()
+            self.view.draw_scores_table()
+            self.view.draw_snake_length()
             pygame.display.flip()
             self.timer.tick(self.snake.speed)
