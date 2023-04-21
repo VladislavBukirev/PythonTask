@@ -6,27 +6,70 @@ import os
 food_images_path = os.path.join(r"C:\Users\79521\PycharmProjects\Snake\FoodImages")
 
 
+class Fruit:
+    def __init__(self, image_path):
+        self.image = pygame.transform.scale(
+            pygame.image.load(image_path).convert_alpha(),
+            (SIZE_BLOCK, SIZE_BLOCK))
+
+    def on_collision(self, snake):
+        pass
+
+
+class GoldenApple(Fruit):
+    def __init__(self):
+        super().__init__(os.path.join(food_images_path, "goldenApple.png"))
+
+    def on_collision(self, snake):
+        snake.score += 1
+        snake.increase_length()
+
+
+class BadApple(Fruit):
+    def __init__(self):
+        super().__init__(os.path.join(food_images_path, "badApple.png"))
+
+    def on_collision(self, snake):
+        snake.reduce_length()
+
+
+class Storm(Fruit):
+    def __init__(self):
+        super().__init__(os.path.join(food_images_path, "storm.png"))
+
+    def on_collision(self, snake):
+        snake.set_speed(2)
+        snake.increase_length()
+
+
+class BadStorm(Fruit):
+    def __init__(self):
+        super().__init__(os.path.join(food_images_path, "badStorm.png"))
+
+    def on_collision(self, snake):
+        snake.set_speed(-2)
+
+
+class Chest(Fruit):
+    def __init__(self):
+        super().__init__(os.path.join(food_images_path, "chest.png"))
+
+    def on_collision(self, snake):
+        snake.add_score(5)
+        snake.increase_length()
+
+
 class Food:
     foods_list = []
 
     def __init__(self, snake):
         self.snake = snake
         self.foods = {
-            'bad_apple': pygame.transform.scale(
-                pygame.image.load(os.path.join(food_images_path, "badApple.png")).convert_alpha(),
-                (SIZE_BLOCK, SIZE_BLOCK)),
-            'golden_apple': pygame.transform.scale(
-                pygame.image.load(os.path.join(food_images_path, "goldenApple.png")).convert_alpha(),
-                (SIZE_BLOCK, SIZE_BLOCK)),
-            'storm': pygame.transform.scale(
-                pygame.image.load(os.path.join(food_images_path, "storm.png")).convert_alpha(),
-                (SIZE_BLOCK, SIZE_BLOCK)),
-            'chest': pygame.transform.scale(
-                pygame.image.load(os.path.join(food_images_path, "chest.png")).convert_alpha(),
-                (SIZE_BLOCK, SIZE_BLOCK)),
-            'bad_storm': pygame.transform.scale(
-                pygame.image.load(os.path.join(food_images_path, "badStorm.png")).convert_alpha(),
-                (SIZE_BLOCK, SIZE_BLOCK))
+            'golden_apple': GoldenApple(),
+            'bad_apple': BadApple(),
+            'storm': Storm(),
+            'bad_storm': BadStorm(),
+            'chest': Chest(),
         }
         self.foods_list = []
         for i in range(3):
@@ -38,12 +81,12 @@ class Food:
                 item = "bad_storm"
             else:
                 item = None
-            self.foods_list.append((x, y, random.choice([key for key in self.foods.keys() if key != item])))
+            self.foods_list.append((x, y, random.choice([key for key in self.foods if key != item])))
 
     def draw_food(self):
         for food in self.foods_list:
             x, y, item = food
-            SCREEN.blit(self.foods[item],
+            SCREEN.blit(self.foods[item].image,
                         (SIZE_BLOCK + y * SIZE_BLOCK + MARGIN * (y + 1),
                          HEADER_MARGIN + SIZE_BLOCK + x * SIZE_BLOCK + MARGIN * (x + 1)))
 
@@ -51,19 +94,7 @@ class Food:
         for food in self.foods_list:
             fx, fy, item = food
             if fx == x and fy == y:
-                if item == 'bad_apple':
-                    self.snake.reduce_length()
-                elif item == 'golden_apple':
-                    self.snake.score += 1
-                    self.snake.increase_length()
-                elif item == 'storm':
-                    self.snake.set_speed(2)
-                    self.snake.increase_length()
-                elif item == 'bad_storm':
-                    self.snake.set_speed(-2)
-                elif item == 'chest':
-                    self.snake.score += 5
-                    self.snake.increase_length()
+                self.foods[item].on_collision(self.snake)
                 self.foods_list.remove(food)
                 self.create_new_food()
                 return True
@@ -79,4 +110,4 @@ class Food:
                 item = "bad_storm"
             else:
                 item = None
-            self.foods_list.append((x, y, random.choice([key for key in self.foods.keys() if key != item])))
+            self.foods_list.append((x, y, random.choice([key for key in self.foods if key != item])))
