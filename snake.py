@@ -37,4 +37,3 @@ class Snake:
 
     def reduce_length(self):
         self.blocks.pop(0)
-

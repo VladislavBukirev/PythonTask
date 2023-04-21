@@ -10,12 +10,12 @@ class TestFood(unittest.TestCase):
         self.snake = Snake()
         self.food = Food(self.snake)
         self.food.foods = {
-        'golden_apple': GoldenApple(),
-        'bad_apple': BadApple(),
-        'storm': Storm(),
-        'bad_storm': BadStorm(),
-        'chest': Chest(),
-        }
+            'golden_apple': GoldenApple(),
+            'bad_apple': BadApple(),
+            'storm': Storm(),
+            'bad_storm': BadStorm(),
+            'chest': Chest(),
+            }
 
     def test_create_new_food(self):
         self.food.create_new_food()
