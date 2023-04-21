@@ -69,6 +69,13 @@ class GameView:
         len_rect.bottomright = (SIZE[0] - 10, HEADER_MARGIN - 5)
         SCREEN.blit(text_length, len_rect)
 
+    def draw_game_scene(self):
+        self.draw_snake()
+        self.draw_level()
+        self.draw_lives()
+        self.draw_scores_table()
+        self.draw_snake_length()
+
 
 class Game:
     def __init__(self):
@@ -95,7 +102,7 @@ class Game:
         new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
         if any(new_head.x == block[0] and new_head.y == block[1] for block in self.level.obstacles) or \
                 not new_head.is_inside() or \
-                any(block != head and block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
+                any(block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
             self.snake.lives -= 1
             if self.snake.lives == 0:
                 pygame.quit()
@@ -123,8 +130,6 @@ class Game:
             head = self.snake.blocks[-1]
             new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
 
-            self.view.draw_snake()
-
             self.check_collision()
             self.food.draw_food()
 
@@ -136,9 +141,6 @@ class Game:
             if len(self.snake.blocks) == self.level.length:
                 self.switch_level()
 
-            self.view.draw_level()
-            self.view.draw_lives()
-            self.view.draw_scores_table()
-            self.view.draw_snake_length()
+            self.view.draw_game_scene()
             pygame.display.flip()
             self.timer.tick(self.snake.speed)
