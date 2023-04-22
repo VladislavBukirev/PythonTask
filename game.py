@@ -102,7 +102,7 @@ class Game:
         new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
         if any(new_head.x == block[0] and new_head.y == block[1] for block in self.level.obstacles) or \
                 not new_head.is_inside() or \
-                any(block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
+                any(block != head and new_head != block and block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
             self.snake.lives -= 1
             if self.snake.lives == 0:
                 pygame.quit()
@@ -130,7 +130,6 @@ class Game:
             head = self.snake.blocks[-1]
             new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
 
-            self.check_collision()
             self.food.draw_food()
 
             self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y)

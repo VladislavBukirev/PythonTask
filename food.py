@@ -3,7 +3,8 @@ import random
 import pygame
 import os
 
-food_images_path = os.path.join(r"C:\Users\79521\PycharmProjects\Snake\FoodImages")
+file_path = os.path.abspath(__file__)
+food_images_path = os.path.join(os.path.dirname(file_path), "FoodImages")
 
 
 class Fruit:
