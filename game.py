@@ -132,6 +132,7 @@ class Game:
 
             self.food.draw_food()
 
+            self.check_collision()
             self.food.check_collision(self.snake.blocks[-1].x, self.snake.blocks[-1].y)
 
             self.snake.blocks.append(new_head)
