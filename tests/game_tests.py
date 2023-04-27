@@ -1,9 +1,9 @@
-import unittest
+from unittest import TestCase, main
 from scripts.game import Game
 from scripts.snake import SnakeBlock
 
 
-class TestGame(unittest.TestCase):
+class TestGame(TestCase):
     def setUp(self):
         self.game = Game()
 

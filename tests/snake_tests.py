@@ -1,10 +1,10 @@
-import unittest
+from unittest import TestCase, main
 
 from scripts.constants import COUNT_BLOCKS
 from scripts.snake import Snake, SnakeBlock
 
 
-class TestSnake(unittest.TestCase):
+class TestSnake(TestCase):
     def setUp(self):
         self.snake = Snake()
 

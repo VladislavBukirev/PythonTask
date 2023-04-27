@@ -1,11 +1,11 @@
-import unittest
+from unittest import TestCase, main
 import random
 
 from scripts.food import Food, GoldenApple, BadApple, Storm, BadStorm, Chest
 from scripts.snake import Snake
 
 
-class TestFood(unittest.TestCase):
+class TestFood(TestCase):
     def setUp(self):
         self.snake = Snake()
         self.food = Food(self.snake)
@@ -32,3 +32,7 @@ class TestFood(unittest.TestCase):
         collided = self.food.check_collision(x, y)
         self.assertFalse(collided)
         self.assertEqual(len(self.food.foods_list), 3)
+
+
+if __name__ == "__main__":
+    main()
