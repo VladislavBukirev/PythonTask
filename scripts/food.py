@@ -1,10 +1,8 @@
 from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, SCREEN
+from constants import FOOD_IMAGE_PATH
 import random
 import pygame
-import os
-
-file_path = os.path.abspath(__file__)
-food_images_path = os.path.join(os.path.dirname(file_path), "FoodImages")
+import os.path
 
 
 class Fruit:
@@ -19,7 +17,7 @@ class Fruit:
 
 class GoldenApple(Fruit):
     def __init__(self):
-        super().__init__(os.path.join(food_images_path, "goldenApple.png"))
+        super().__init__(os.path.join(FOOD_IMAGE_PATH, "goldenApple.png"))
 
     def on_collision(self, snake):
         snake.score += 1
@@ -28,7 +26,7 @@ class GoldenApple(Fruit):
 
 class BadApple(Fruit):
     def __init__(self):
-        super().__init__(os.path.join(food_images_path, "badApple.png"))
+        super().__init__(os.path.join(FOOD_IMAGE_PATH, "badApple.png"))
 
     def on_collision(self, snake):
         snake.reduce_length()
@@ -36,7 +34,7 @@ class BadApple(Fruit):
 
 class Storm(Fruit):
     def __init__(self):
-        super().__init__(os.path.join(food_images_path, "storm.png"))
+        super().__init__(os.path.join(FOOD_IMAGE_PATH, "storm.png"))
 
     def on_collision(self, snake):
         snake.set_speed(2)
@@ -45,7 +43,7 @@ class Storm(Fruit):
 
 class BadStorm(Fruit):
     def __init__(self):
-        super().__init__(os.path.join(food_images_path, "badStorm.png"))
+        super().__init__(os.path.join(FOOD_IMAGE_PATH, "badStorm.png"))
 
     def on_collision(self, snake):
         snake.set_speed(-2)
@@ -53,7 +51,7 @@ class BadStorm(Fruit):
 
 class Chest(Fruit):
     def __init__(self):
-        super().__init__(os.path.join(food_images_path, "chest.png"))
+        super().__init__(os.path.join(FOOD_IMAGE_PATH, "chest.png"))
 
     def on_collision(self, snake):
         snake.add_score(5)

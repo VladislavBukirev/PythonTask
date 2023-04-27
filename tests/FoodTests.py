@@ -1,8 +1,8 @@
 import unittest
 import random
 
-from food import Food, GoldenApple, BadApple, Storm, BadStorm, Chest
-from snake import Snake
+from scripts.food import Food, GoldenApple, BadApple, Storm, BadStorm, Chest
+from scripts.snake import Snake
 
 
 class TestFood(unittest.TestCase):

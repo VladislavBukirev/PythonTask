@@ -2,9 +2,9 @@ import pygame
 import sys
 import os
 
-from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, SNAKE_COLOR, BLACK, SCREEN, SIZE
+from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, SNAKE_COLOR, BLACK, SCREEN, SIZE, FOOD_IMAGE_PATH
 from snake import Snake
-from food import Food
+from scripts.food import Food
 from snake import Direction
 from snake import SnakeBlock
 from levels import Levels
@@ -45,10 +45,9 @@ class GameView:
         SCREEN.blit(text_condition, condition_rect.bottomleft)
 
     def draw_lives(self):
-        path_to_image = os.path.join(r"C:\Users\79521\PycharmProjects\Snake\FoodImages")
         heart_image = pygame.transform.scale(
-                pygame.image.load(os.path.join(path_to_image, "heart.png")).convert_alpha(),
-                (20, 20))
+            pygame.image.load(os.path.join(FOOD_IMAGE_PATH, "heart.png")).convert_alpha(),
+            (20, 20))
         heart_rect = heart_image.get_rect()
         heart_rect.topleft = (50, 10)
         for i in range(self.snake.lives):

@@ -1,7 +1,7 @@
 import unittest
 
-from constants import COUNT_BLOCKS
-from snake import Snake, SnakeBlock
+from scripts.constants import COUNT_BLOCKS
+from scripts.snake import Snake, SnakeBlock
 
 
 class TestSnake(unittest.TestCase):

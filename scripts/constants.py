@@ -1,5 +1,8 @@
 import pygame
+import os
+file_path = os.path.abspath(__file__)
 
+FOOD_IMAGE_PATH = os.path.abspath(os.path.join(os.path.dirname(file_path), '..', 'FoodImages'))
 SIZE_BLOCK = 20
 FRAME_COLOR = (42, 128, 100)
 HEADER_COLOR = (0, 204, 153)

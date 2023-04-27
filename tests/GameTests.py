@@ -1,6 +1,6 @@
 import unittest
-from game import Game
-from snake import SnakeBlock
+from scripts.game import Game
+from scripts.snake import SnakeBlock
 
 
 class TestGame(unittest.TestCase):
