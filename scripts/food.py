@@ -1,5 +1,5 @@
-from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, SCREEN
-from constants import FOOD_IMAGE_PATH
+from scripts.constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS, SCREEN
+from scripts.constants import FOOD_IMAGE_PATH
 import random
 import pygame
 import os.path

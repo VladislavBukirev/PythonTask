@@ -2,12 +2,12 @@ import pygame
 import sys
 import os
 
-from constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, SNAKE_COLOR, BLACK, SCREEN, SIZE, FOOD_IMAGE_PATH
-from snake import Snake
+from scripts.constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, SNAKE_COLOR, BLACK, SCREEN, SIZE, FOOD_IMAGE_PATH
+from scripts.snake import Snake
 from scripts.food import Food
-from snake import Direction
-from snake import SnakeBlock
-from levels import Levels
+from scripts.snake import Direction
+from scripts.snake import SnakeBlock
+from scripts.levels import Levels
 
 
 def draw_block(color, row, column):

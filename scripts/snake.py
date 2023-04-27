@@ -1,4 +1,4 @@
-from constants import COUNT_BLOCKS
+from scripts.constants import COUNT_BLOCKS
 
 
 class Direction:

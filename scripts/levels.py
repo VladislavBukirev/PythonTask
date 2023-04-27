@@ -1,6 +1,5 @@
-
 import pygame
-from constants \
+from scripts.constants \
     import SIZE_BLOCK, MARGIN, HEADER_MARGIN, COUNT_BLOCKS,\
     FRAME_COLOR, HEADER_COLOR, BACKGROUND_COLOR, BLACK, SCREEN, SIZE
 
