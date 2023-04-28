@@ -86,6 +86,28 @@ class Game:
         self.level = level1
         self.view = GameView(self.snake, self.level)
 
+    def pause_game(self):
+        pygame.display.set_caption("Paused")
+        self.timer.tick(self.snake.speed)
+        paused = True
+        while paused:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.display.set_caption("Snake")
+                        paused = False  # выходим из цикла и продолжаем игру
+                        break
+
+            pause_font = pygame.font.SysFont('Times New Roman', 50)
+            pause_text = pause_font.render("PAUSED", True, SNAKE_COLOR)
+            pause_rect = pause_text.get_rect()
+            pause_rect.center = (SIZE[0] // 2, SIZE[1] // 2)
+            SCREEN.blit(pause_text, pause_rect)
+            pygame.display.flip()
+
     def process_movement_key(self, event):
         if event.key == pygame.K_UP and self.snake.direction != Direction.DOWN:
             self.snake.direction = Direction.UP
@@ -122,7 +144,10 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
-                    self.process_movement_key(event)
+                    if event.key == pygame.K_ESCAPE:
+                        self.pause_game()
+                    else:
+                        self.process_movement_key(event)
 
             self.level.draw_level()
 
