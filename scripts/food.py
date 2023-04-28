@@ -59,8 +59,6 @@ class Chest(Fruit):
 
 
 class Food:
-    foods_list = []
-
     def __init__(self, snake):
         self.snake = snake
         self.foods = {
@@ -71,9 +69,10 @@ class Food:
             'chest': Chest(),
         }
         self.foods_list = []
+        self.occupied_coords = []
+
         for i in range(3):
-            x = random.randint(1, COUNT_BLOCKS - 1)
-            y = random.randint(1, COUNT_BLOCKS - 1)
+            x, y = self.generate_new_coord()
             if len(self.snake.blocks) <= 3:
                 item = "bad_apple"
             elif self.snake.speed <= 5:
@@ -81,6 +80,15 @@ class Food:
             else:
                 item = None
             self.foods_list.append((x, y, random.choice([key for key in self.foods if key != item])))
+            self.occupied_coords.append((x, y))
+
+
+    def generate_new_coord(self):
+        while True:
+            x = random.randint(1, COUNT_BLOCKS - 1)
+            y = random.randint(1, COUNT_BLOCKS - 1)
+            if (x, y) not in self.occupied_coords:
+                return x, y
 
     def draw_food(self):
         for food in self.foods_list:
@@ -101,8 +109,7 @@ class Food:
 
     def create_new_food(self):
         while len(self.foods_list) < 3:
-            x = random.randint(1, COUNT_BLOCKS - 1)
-            y = random.randint(1, COUNT_BLOCKS - 1)
+            x, y = self.generate_new_coord()
             if len(self.snake.blocks) <= 3:
                 item = "bad_apple"
             elif self.snake.speed <= 5:
@@ -110,3 +117,4 @@ class Food:
             else:
                 item = None
             self.foods_list.append((x, y, random.choice([key for key in self.foods if key != item])))
+            self.occupied_coords.append((x, y))

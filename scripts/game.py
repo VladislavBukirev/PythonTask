@@ -34,15 +34,10 @@ class GameView:
 
     def draw_level(self):
         font_level = pygame.font.SysFont('Times New Roman', 16)
-        font_condition = pygame.font.SysFont('Times New Roman', 16)
         text_level = font_level.render(f'Level: {self.level.number}', True, BLACK)
-        text_condition = font_condition.render(f'Condition for next level: {self.level.length}', True, BLACK)
         level_rect = text_level.get_rect()
-        condition_rect = text_condition.get_rect()
         level_rect.center = (40, 20)
-        condition_rect.center = (95, 40)
         SCREEN.blit(text_level, level_rect.bottomleft)
-        SCREEN.blit(text_condition, condition_rect.bottomleft)
 
     def draw_lives(self):
         heart_image = pygame.transform.scale(
@@ -123,7 +118,8 @@ class Game:
         new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
         if any(new_head.x == block[0] and new_head.y == block[1] for block in self.level.obstacles) or \
                 not new_head.is_inside() or \
-                any(block != head and new_head != block and block.x == new_head.x and block.y == new_head.y for block in self.snake.blocks):
+                any(block != head and new_head != block and block.x == new_head.x and block.y == new_head.y
+                    for block in self.snake.blocks):
             self.snake.lives -= 1
             if self.snake.lives == 0:
                 pygame.quit()
