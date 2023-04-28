@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import pygame.mixer as mixer
 
 from scripts.constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, SNAKE_COLOR, BLACK, SCREEN, SIZE, FOOD_IMAGE_PATH
 from scripts.snake import Snake
@@ -80,6 +81,11 @@ class Game:
         self.food = Food(self.snake)
         self.level = level1
         self.view = GameView(self.snake, self.level)
+
+        # загрузка музыкального файла
+        mixer.init()
+        mixer.music.load('musicForSnake.mp3')
+        mixer.music.play(-1)  # -1 означает зацикливание музыки
 
     def pause_game(self):
         pygame.display.set_caption("Paused")
