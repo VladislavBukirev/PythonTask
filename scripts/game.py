@@ -82,10 +82,10 @@ class Game:
         self.level = level1
         self.view = GameView(self.snake, self.level)
 
-        # загрузка музыкального файла
         mixer.init()
         mixer.music.load('musicForSnake.mp3')
-        mixer.music.play(-1)  # -1 означает зацикливание музыки
+        mixer.music.play(-1)
+        mixer.music.set_volume(0.5)
 
     def pause_game(self):
         pygame.display.set_caption("Paused")
@@ -99,7 +99,7 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         pygame.display.set_caption("Snake")
-                        paused = False  # выходим из цикла и продолжаем игру
+                        paused = False
                         break
 
             pause_font = pygame.font.SysFont('Times New Roman', 50)

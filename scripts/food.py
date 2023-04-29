@@ -3,6 +3,7 @@ from scripts.constants import FOOD_IMAGE_PATH
 import random
 import pygame
 import os.path
+import pygame.mixer as mixer
 
 
 class Fruit:
@@ -81,6 +82,9 @@ class Food:
             self.foods_list.append((x, y, random.choice([key for key in self.foods if key != item])))
             self.occupied_coords.append((x, y))
 
+        mixer.init()
+        self.eat_sound = pygame.mixer.Sound("musicForEatingFruit.mp3")
+
     def generate_new_coord(self):
         while True:
             x = random.randint(1, COUNT_BLOCKS - 1)
@@ -102,6 +106,7 @@ class Food:
                 self.foods[item].on_collision(self.snake)
                 self.foods_list.remove(food)
                 self.create_new_food()
+                self.eat_sound.play()
                 return True
         return False
 
