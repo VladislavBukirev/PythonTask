@@ -1,8 +1,10 @@
 from unittest import TestCase, main
+import pygame
 
 from scripts.game import Game
 from scripts.snake import SnakeBlock
 from scripts.snake import Snake
+from scripts.snake import Direction
 
 
 class TestGame(TestCase):
@@ -32,4 +34,3 @@ class TestGame(TestCase):
         self.game.snake.direction = [1, 0]
         self.game.check_collision()
         self.assertEqual(self.game.snake.lives, 3)
-

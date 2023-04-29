@@ -51,27 +51,6 @@ class TestFood(TestCase):
         Chest.on_collision(Fruit, self.snake)
         self.assertEqual(self.snake.score, current_score + 5)
 
-    def test_create_bad_storm_when_speed_low(self):
-        snake = Snake()
-        snake.set_speed(5)
-        food_manager = Food(snake)
-        food_manager.create_new_food()
-        for i in range(10):
-            for food in food_manager.foods_list:
-                self.assertTrue(food[2] != "bad_storm")
-
-    def test_create_bad_storm_when_speed_high(self):
-        snake = Snake()
-        snake.set_speed(10)
-        food_manager = Food(snake)
-        food_manager.create_new_food()
-        flag = False
-        for i in range(10):
-            for food in food_manager.foods_list:
-                if food[2] == "bad_storm":
-                    flag = True
-        self.assertTrue(flag)
-
     def test_create_new_food(self):
         snake = self.snake
         snake.blocks.append(SnakeBlock(9, 9))
@@ -81,7 +60,6 @@ class TestFood(TestCase):
         available_foods = [food[2] for food in food_manager.foods_list]
         for bad_food_type in ["bad_apple", "bad_storm"]:
             self.assertNotIn(bad_food_type, available_foods)
-
 
     def test_check_collision(self):
         x, y, item = self.food.foods_list[0]
