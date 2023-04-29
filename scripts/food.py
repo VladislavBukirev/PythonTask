@@ -73,15 +73,13 @@ class Food:
 
         for i in range(3):
             x, y = self.generate_new_coord()
+            item = None
             if len(self.snake.blocks) <= 3:
                 item = "bad_apple"
             elif self.snake.speed <= 5:
                 item = "bad_storm"
-            else:
-                item = None
             self.foods_list.append((x, y, random.choice([key for key in self.foods if key != item])))
             self.occupied_coords.append((x, y))
-
 
     def generate_new_coord(self):
         while True:
@@ -108,13 +106,13 @@ class Food:
         return False
 
     def create_new_food(self):
+        available_foods = list(self.foods.keys())
+        if len(self.snake.blocks) <= 3:
+            available_foods.remove("bad_apple")
+        elif self.snake.speed <= 5:
+            available_foods = [t for t in available_foods if t != "bad_storm"]
         while len(self.foods_list) < 3:
             x, y = self.generate_new_coord()
-            if len(self.snake.blocks) <= 3:
-                item = "bad_apple"
-            elif self.snake.speed <= 5:
-                item = "bad_storm"
-            else:
-                item = None
-            self.foods_list.append((x, y, random.choice([key for key in self.foods if key != item])))
+            item = random.choice(available_foods)
+            self.foods_list.append((x, y, item))
             self.occupied_coords.append((x, y))

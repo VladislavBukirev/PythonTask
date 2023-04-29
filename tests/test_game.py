@@ -1,11 +1,14 @@
 from unittest import TestCase, main
+
 from scripts.game import Game
 from scripts.snake import SnakeBlock
+from scripts.snake import Snake
 
 
 class TestGame(TestCase):
     def setUp(self):
         self.game = Game()
+        self.snake = Snake()
 
     def test_check_collision_obstacle(self):
         self.game.level.obstacles = [(10, 9)]
@@ -29,3 +32,4 @@ class TestGame(TestCase):
         self.game.snake.direction = [1, 0]
         self.game.check_collision()
         self.assertEqual(self.game.snake.lives, 3)
+
