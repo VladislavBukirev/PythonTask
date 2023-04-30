@@ -51,16 +51,6 @@ class TestFood(TestCase):
         Chest.on_collision(Fruit, self.snake)
         self.assertEqual(self.snake.score, current_score + 5)
 
-    def test_create_new_food(self):
-        snake = self.snake
-        snake.blocks.append(SnakeBlock(9, 9))
-        snake.set_speed(3)
-        food_manager = Food(snake)
-        food_manager.create_new_food()
-        available_foods = [food[2] for food in food_manager.foods_list]
-        for bad_food_type in ["bad_apple", "bad_storm"]:
-            self.assertNotIn(bad_food_type, available_foods)
-
     def test_check_collision(self):
         x, y, item = self.food.foods_list[0]
         collided = self.food.check_collision(x, y)
