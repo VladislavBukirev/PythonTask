@@ -3,7 +3,6 @@ import sys
 import os
 import pygame.mixer as mixer
 import pygame_gui
-from pygame_gui.elements.ui_button import UIButton
 
 from scripts.constants import SIZE_BLOCK, MARGIN, HEADER_MARGIN, SNAKE_COLOR, BLACK, SCREEN, SIZE, FOOD_IMAGE_PATH
 from scripts.snake import Snake
@@ -74,6 +73,41 @@ class GameView:
         self.draw_snake_length()
 
 
+def restart_game():
+    game = Game()
+    game.level.draw_level()
+    game.view.draw_game_scene()
+    game.run()
+
+
+def open_restart():
+    restart_screen = pygame.display.set_mode((SIZE[0], SIZE[1]))
+    gui_manager = pygame_gui.UIManager((400, 300))
+    restart_button = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect(((SIZE[0] - 200) / 2, (SIZE[1] - 100) / 2), (200, 100)),
+        text='Restart',
+        manager=gui_manager
+    )
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == restart_button:
+                        running = False
+                        restart_game()
+            gui_manager.process_events(event)
+
+        gui_manager.draw_ui(restart_screen)
+        pygame.display.update()
+
+        gui_manager.update(pygame.time.Clock().tick(60))
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -88,39 +122,6 @@ class Game:
         mixer.music.load('musicForSnake.mp3')
         mixer.music.play(-1)
         mixer.music.set_volume(0.5)
-
-    def open_restart(self):
-        restart_screen = pygame.display.set_mode((SIZE[0], SIZE[1]))
-        gui_manager = pygame_gui.UIManager((400, 300))
-        restart_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(((SIZE[0] - 200) / 2, (SIZE[1] - 100) / 2), (200, 100)),
-            text='Restart',
-            manager=gui_manager
-        )
-
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.USEREVENT:
-                    if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-                        if event.ui_element == restart_button:
-                            running = False
-                            self.restart_game()
-                gui_manager.process_events(event)
-
-            gui_manager.draw_ui(restart_screen)
-            pygame.display.update()
-
-            gui_manager.update(pygame.time.Clock().tick(60))
-
-    def restart_game(self):
-        game = Game()
-        game.level.draw_level()
-        game.view.draw_game_scene()
-        game.run()
 
     def pause_game(self):
         pygame.display.set_caption("Paused")
@@ -165,7 +166,7 @@ class Game:
             collision_sound.play()
             self.snake.lives -= 1
             if self.snake.lives == 0:
-                self.open_restart()
+                open_restart()
 
     def switch_level(self):
         index = Levels_list.index(self.level)
