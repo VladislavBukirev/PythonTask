@@ -158,15 +158,16 @@ class Game:
     def check_collision(self):
         head = self.snake.blocks[-1]
         new_head = SnakeBlock(head.x + self.snake.direction[0], head.y + self.snake.direction[1])
+        if not new_head.is_inside():
+            self.snake.lives = 0
         if any(new_head.x == block[0] and new_head.y == block[1] for block in self.level.obstacles) or \
-                not new_head.is_inside() or \
                 any(block != head and new_head != block and block.x == new_head.x and block.y == new_head.y
                     for block in self.snake.blocks):
             collision_sound = mixer.Sound('collisionSound.mp3')
             collision_sound.play()
             self.snake.lives -= 1
-            if self.snake.lives == 0:
-                open_restart()
+        if self.snake.lives == 0:
+            open_restart()
 
     def switch_level(self):
         index = Levels_list.index(self.level)

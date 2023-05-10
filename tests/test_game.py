@@ -1,10 +1,9 @@
 from unittest import TestCase, main
-import pygame
+import pygame_gui
 
 from scripts.game import Game
-from scripts.snake import SnakeBlock
 from scripts.snake import Snake
-from scripts.snake import Direction
+from scripts.snake import SnakeBlock
 
 
 class TestGame(TestCase):
